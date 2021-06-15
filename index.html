@@ -61,11 +61,14 @@
             DeviceOrientationEvent.requestPermission().then((s) => {
               if (s !== 'granted') alert('Permission not granted');
             });
-          window.addEventListener('deviceorientation', ({ alpha, beta, gamma }) => {
-            image.style.transform = `rotateZ(${alpha}deg) rotateX(${-beta}deg) rotateY(${gamma}deg)`;
-            values.innerText = `alpha: ${Math.round(alpha * 100) / 100}°
-                beta: ${Math.round(beta * 100) / 100}°
-                gamma: ${Math.round(gamma * 100) / 100}°`;
+          window.addEventListener('deviceorientation', (event) => {
+            image.style.transform = `rotateZ(${event.alpha}deg) rotateX(${-event.beta}deg) rotateY(${event.gamma}deg)`;
+            values.innerText = `alpha: ${Math.round(event.alpha * 100) / 100}°
+                beta: ${Math.round(event.beta * 100) / 100}°
+                gamma: ${Math.round(event.gamma * 100) / 100}°
+                absolute: ${event.absolute}
+                compass heading:${event.webkitCompassHeading}
+                compass accuracy: ${event.webkitCompassAccuracy}`;
             values.style.display = 'block';
           });
         });
