@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Orientation</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        font: 14px sans-serif;
+        color: #333;
+        background: #ccc;
+      }
+      #image {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        opacity: 0.5;
+      }
+      #values {
+        display: none;
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+        width: 120px;
+        border-radius: 4px;
+        padding: 10px;
+        white-space: pre-line;
+        background: #fff;
+        box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+      }
+      #button {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        border: 0;
+        border-radius: 4px;
+        padding: 10px;
+        font-weight: bold;
+        background: #fff;
+        box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <img id="image" src="https://upload.wikimedia.org/wikipedia/commons/1/1a/Brosen_windrose.svg" />
+    <div id="values"></div>
+    <button id="button">deviceorientation</button>
+    <script>
+      const image = document.getElementById('image'),
+        values = document.getElementById('values'),
+        button = document.getElementById('button');
+
+      if (window.DeviceOrientationEvent)
+        button.addEventListener('click', () => {
+          if (DeviceOrientationEvent.requestPermission)
+            DeviceOrientationEvent.requestPermission().then((s) => {
+              if (s !== 'granted') alert('Permission not granted');
+            });
+          window.addEventListener('deviceorientation', ({ alpha, beta, gamma }) => {
+            image.style.transform = `rotateZ(${alpha}deg) rotateX(${-beta}deg) rotateY(${gamma}deg)`;
+            values.innerText = `alpha: ${Math.round(alpha * 100) / 100}°
+                beta: ${Math.round(beta * 100) / 100}°
+                gamma: ${Math.round(gamma * 100) / 100}°`;
+            values.style.display = 'block';
+          });
+        });
+    </script>
+  </body>
+</html>
