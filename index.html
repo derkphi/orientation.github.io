@@ -95,9 +95,9 @@
         values.innerText = `alpha: ${Math.round(event.alpha * 100) / 100}°
             beta: ${Math.round(event.beta * 100) / 100}°
             gamma: ${Math.round(event.gamma * 100) / 100}°
-            absolute: ${event.absolute}`;
-            //compass heading:${event.webkitCompassHeading}
-            //compass accuracy: ${event.webkitCompassAccuracy}`;
+            absolute: ${event.absolute}
+            heading:${event.webkitCompassHeading}
+            accuracy: ${event.webkitCompassAccuracy}`;
         values.style.display = 'block';
       }    
     </script>
