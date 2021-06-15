@@ -49,29 +49,44 @@
   <body>
     <img id="image" src="https://upload.wikimedia.org/wikipedia/commons/1/1a/Brosen_windrose.svg" />
     <div id="values"></div>
-    <button id="button">deviceorientation</button>
+    <button id="button">relative</button>
+    <button id="buttonAbsolute">absolute</button>
     <script>
       const image = document.getElementById('image'),
-        values = document.getElementById('values'),
-        button = document.getElementById('button');
+      values = document.getElementById('values'),
+      buttRel = document.getElementById('button');
+      buttAbs = document.getElementById('buttonAbsolute');
 
-      if (window.DeviceOrientationEvent)
-        button.addEventListener('click', () => {
-          if (DeviceOrientationEvent.requestPermission)
-            DeviceOrientationEvent.requestPermission().then((s) => {
-              if (s !== 'granted') alert('Permission not granted');
-            });
-          window.addEventListener('deviceorientation', (event) => {
-            image.style.transform = `rotateZ(${event.alpha}deg) rotateX(${-event.beta}deg) rotateY(${event.gamma}deg)`;
-            values.innerText = `alpha: ${Math.round(event.alpha * 100) / 100}°
-                beta: ${Math.round(event.beta * 100) / 100}°
-                gamma: ${Math.round(event.gamma * 100) / 100}°
-                absolute: ${event.absolute}
-                compass heading:${event.webkitCompassHeading}
-                compass accuracy: ${event.webkitCompassAccuracy}`;
-            values.style.display = 'block';
+      if (window.DeviceOrientationEvent) {
+        buttRel.addEventListener('click', () => handleButtonClick(true));
+        buttAbs.addEventListener('click', () => handleButtonClick(false))
+      }
+
+      function handleButtonClick(isRelative) {
+        if (DeviceOrientationEvent.requestPermission)
+          DeviceOrientationEvent.requestPermission().then((s) => {
+            if (s !== 'granted') alert('Permission not granted');
           });
-        });
+
+        if (isRelative) {
+          window.removeEventListener('deviceorientationabsolute', handleOrientation)
+          window.addEventListener('deviceorientation', handleOrientation);
+        } else {
+          window.removeEventListener('deviceorientation', handleOrientation)
+          window.addEventListener('deviceorientationabsolute', handleOrientation);
+        }
+      }
+
+      function handleOrientation(event){
+        image.style.transform = `rotateZ(${event.alpha}deg) rotateX(${-event.beta}deg) rotateY(${event.gamma}deg)`;
+        values.innerText = `alpha: ${Math.round(event.alpha * 100) / 100}°
+            beta: ${Math.round(event.beta * 100) / 100}°
+            gamma: ${Math.round(event.gamma * 100) / 100}°
+            absolute: ${event.absolute}`;
+            //compass heading:${event.webkitCompassHeading}
+            //compass accuracy: ${event.webkitCompassAccuracy}`;
+        values.style.display = 'block';
+      }    
     </script>
   </body>
 </html>
